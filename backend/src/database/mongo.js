@@ -1,20 +1,26 @@
-import { MongoClient } from 'mongodb'
+import mongoose from 'mongoose';
 
 export const Mongo = {
-    async connect({ mongoConnectionString, mongoDbName }) {
+    async connect(mongoConnectionString) {
         try {
-            const client = new MongoClient(mongoConnectionString)
-    
-            await client.connect()
-            const db = client.db(mongoDbName)
+            await mongoose.connect(mongoConnectionString, {
+                useNewUrlParser: true,
+                useUnifiedTopology: true,
+            });
 
-            this.client = client
-            this.db = db
+            const db = mongoose.connection;
+            db.on('error', (err) => {
+                console.error('MongoDB connection error:', err);
+            });
 
-            return 'Connected to mongo!'
-            
+            db.once('open', () => {
+                console.log('Connected to MongoDB');
+            });
+
+            return { success: true };
         } catch (error) {
-            return { text: 'Error during mongo connection', error }
+            console.error('Error during mongo connection:', error);
+            return { success: false, error };
         }
     }
-}
+};
