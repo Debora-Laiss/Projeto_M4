@@ -1,3 +1,4 @@
+import mongoose from 'mongoose';
 import Entry from "../models/moodRecordModel.js";
 
 class MoodRecordControllers {
@@ -13,18 +14,20 @@ class MoodRecordControllers {
 	}
 
 	async getEntry(id) {
-		try {
-			const entry = await Entry.findById(id);
-			// ! -> negação
-			// ! + entry = se entry não existe/vier
-			if (!entry) {
-				return { body: "Entry not found", success: false, statusCode: 404 };
-			}
-			return { body: entry, success: true, statusCode: 200 };
-		} catch (error) {
-			return { body: error.message, success: false, statusCode: 500 };
+		if (!mongoose.Types.ObjectId.isValid(id)) {
+		  return { body: "Invalid ID format", success: false, statusCode: 400 };
 		}
-	}
+	
+		try {
+		  const entry = await Entry.findById(id);
+		  if (!entry) {
+			return { body: "Entry not found", success: false, statusCode: 404 };
+		  }
+		  return { body: entry, success: true, statusCode: 200 };
+		} catch (error) {
+		  return { body: error.message, success: false, statusCode: 500 };
+		}
+	  }
 
 	async getEntriesByDate(date) {
 		try {
