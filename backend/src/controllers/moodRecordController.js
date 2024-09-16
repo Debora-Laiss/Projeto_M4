@@ -3,7 +3,7 @@ import Entry from "../models/moodRecordModel.js";
 
 class MoodRecordControllers {
 	async getEntries() {
-		//console.log("getEntries");
+		//console.log("getEntries")
 		try {
 			const entries = await Entry.find({});			
 			console.log("Aqui estao seus dados", entries);
