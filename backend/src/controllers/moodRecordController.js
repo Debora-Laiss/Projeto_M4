@@ -3,10 +3,10 @@ import Entry from "../models/moodRecordModel.js";
 
 class MoodRecordControllers {
 	async getEntries() {
-		console.log("getEntries");
+		//console.log("getEntries");
 		try {
-			const entries = await Entry.find({});
-			console.log("chegou aqui", entries);
+			const entries = await Entry.find({});			
+			console.log("Aqui estao seus dados", entries);
 			return { body: entries, success: true, statusCode: 200 };
 		} catch (error) {
 			return { body: error.message, success: false, statusCode: 500 };
